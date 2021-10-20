@@ -153,6 +153,13 @@
   <ItemGroup>
     <ResourceCompile Include="cplus_LOGIN_console.rc" />
   </ItemGroup>
+  <ItemGroup>
+    <CopyFileToFolders Include="login.db">
+      <DeploymentContent>true</DeploymentContent>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+      <FileType>Document</FileType>
+    </CopyFileToFolders>
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

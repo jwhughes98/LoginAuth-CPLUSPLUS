@@ -38,10 +38,11 @@ static int callback(void* data, int argc, char** argv, char** azColName) {
 
     printf("\n");
     return 0;
-}
+}//done
 
 wstring getHWID()
 {
+    //get hwid
     HW_PROFILE_INFO hwProfileInfo;
     if (GetCurrentHwProfile(&hwProfileInfo))
     {       
@@ -128,10 +129,7 @@ int main()
     string license;
     string currentHWID;
 
-    //const char *sql;
-    
-    //open database
-    
+    //open database  
     if (std::filesystem::exists("login.db"))
     {
         rc = sqlite3_open("login.db", &db);
@@ -182,16 +180,12 @@ int main()
         sqlite3_prepare_v2(db, statementxyz.c_str(), -1, &stmt, 0);
         sqlite3_step(stmt);
 
-        //printf("Result1: %s", sqlite3_column_text(stmt, 0));
-        //printf("Result1: %s", sqlite3_column_text(stmt, 1));
-        
         const unsigned char* startx;
         const unsigned char* endx;
         startx = sqlite3_column_text(stmt, 0);
         endx = sqlite3_column_text(stmt, 1);
         const char * str_start = (const char*)(startx);
-        const char * str_end = (const char*)(endx);
-       
+        const char * str_end = (const char*)(endx);       
 
         time_t s1, s2;                
         std::tm tmX = {};
@@ -210,24 +204,21 @@ int main()
         s1 = mktime(&tmX);
         s2 = mktime(&tmY);       
 
+        //time to end in formats
         double differenceDays = (std::difftime(s2, s1) / (60 * 60 * 24));
         double differenceHours = (std::difftime(s2, s1) / (60 * 60));
         double differenceSeconds = (std::difftime(s2, s1));
                 
-        std::cout << "Hours Remaining: " << differenceHours << std::endl;
-        std::cout << "Days Remaining: " << differenceDays << std::endl;     
-        //works out get an extra hour ???
-
-        //terminateProgram__TimerStart();
-        countSeconds = differenceSeconds;
-        countSeconds = 70;
+        //std::cout << "Hours Remaining: " << differenceHours << std::endl;
+        //std::cout << "Days Remaining: " << differenceDays << std::endl;     
+       
+        //set seconds to end program
+        countSeconds = differenceSeconds;       
         auto future = std::async(endProgramTimer);
-        std::cout << "test\n";
-
     }
 
     //hwid not activated
-    else if (db_hwid == "NULL" && getActivated == 0)
+    else if (db_hwid == "NONE" && getActivated == 0)
     {
         //set the hwid and make key activated        
         string statement1 = "UPDATE users SET hwid = '" + currentHWID + "', activated = '1' WHERE license ='" + license +"'";
@@ -247,7 +238,12 @@ int main()
         sqlite3_prepare_v2(db, statement3.c_str(), -1, &stmt, 0);
         sqlite3_step(stmt);
         
+        //restart program now key redeemed
         cout << "Key Activated!";
+        cout << "\nPlease Restart Program...";
+        cout << "\nProgram will terminate in 5 Seconds";
+        std::this_thread::sleep_for(std::chrono::milliseconds(5000));
+        exit(EXIT_SUCCESS);
     }
   
     else

@@ -42,6 +42,6 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="login.db" />
+    <CopyFileToFolders Include="login.db" />
   </ItemGroup>
 </Project>
